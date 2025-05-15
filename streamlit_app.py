@@ -89,22 +89,17 @@ def get_driver(proxy: str = None, socksStr: str = None) -> webdriver.Chrome:
     driver = webdriver.Chrome(service=service, options=options)
     return driver
 
-
 from PIL import Image, ImageDraw, ImageFont
-import io
-import os
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import io, os
 
 def take_mobile_screenshot(mlb_player_id):
     print('DRIVER')
-    driver = get_driver(proxy=None, socksStr="socks5")  # or proxy=None
-    
+    driver = get_driver(proxy=None, socksStr="socks5")
     print('DRIVER SECURED')
     url = f"https://www.mlb.com/player/{mlb_player_id}"
     driver.get(url)
     print('Page Loaded')
+
     try:
         WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".player-name, h1, .player-profile-name"))
@@ -143,6 +138,7 @@ def take_mobile_screenshot(mlb_player_id):
     png = driver.get_screenshot_as_png()
     driver.quit()
     print('Done')
+
     try:
         os.rmdir(user_data_dir)
     except:
@@ -151,9 +147,13 @@ def take_mobile_screenshot(mlb_player_id):
     image = Image.open(io.BytesIO(png))
     cropped = image.crop((0, 300, image.width, 1430))
 
-    # Add watermark
-    draw = ImageDraw.Draw(cropped)
-    watermark_text = "TJStats"  # Replace with your watermark
+    # Convert to RGBA
+    base = cropped.convert("RGBA")
+
+    # Make a transparent overlay
+    txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
+    draw = ImageDraw.Draw(txt)
+    watermark_text = "TJStats"
     font_size = 28
     try:
         font = ImageFont.truetype("arial.ttf", font_size)
@@ -162,13 +162,15 @@ def take_mobile_screenshot(mlb_player_id):
 
     text_width, text_height = draw.textsize(watermark_text, font)
     padding = 10
-    position = (cropped.width - text_width - padding, cropped.height - text_height - padding)
-    
-    draw.text(position, watermark_text, font=font, fill=(255, 255, 255, 10))  # White with light transparency
+    position = (base.width - text_width - padding, base.height - text_height - padding)
 
-    return cropped
+    # Draw semi-transparent white text
+    draw.text(position, watermark_text, font=font, fill=(255, 255, 255, 128))  # 128 = 50% opacity
 
+    # Merge watermark with image
+    watermarked = Image.alpha_composite(base, txt)
 
+    return watermarked.convert("RGB")  # Return to RGB if saving as JPEG or displaying without alpha
 
 st.title("MLB Player Screenshot")
 
