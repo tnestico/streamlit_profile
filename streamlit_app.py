@@ -164,7 +164,7 @@ def take_mobile_screenshot(mlb_player_id):
     position = (360,600)
     
     # Draw opaque white text directly on the image
-    draw.text(position, watermark_text, font=font, fill=(240, 240, 240))
+    draw.text(position, watermark_text, font=font, fill=(0, 0, 0))
     
     return base  # Already in RGB
     
