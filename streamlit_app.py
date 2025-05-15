@@ -165,7 +165,7 @@ def take_mobile_screenshot(mlb_player_id):
     position = (base.width - text_width - padding, base.height - text_height - padding)
 
     # Draw semi-transparent white text
-    draw.text(position, watermark_text, font=font, fill=(255, 255, 255, 128))  # 128 = 50% opacity
+    draw.text(position, watermark_text, font=font, fill=(255, 255, 255))  # 128 = 50% opacity
 
     # Merge watermark with image
     watermarked = Image.alpha_composite(base, txt)
