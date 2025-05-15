@@ -164,7 +164,7 @@ def take_mobile_screenshot(mlb_player_id):
     padding = 10
     position = (cropped.width - text_width - padding, cropped.height - text_height - padding)
     
-    draw.text(position, watermark_text, font=font, fill=(255, 255, 255, 180))  # White with light transparency
+    draw.text(position, watermark_text, font=font, fill=(255, 255, 255, 10))  # White with light transparency
 
     return cropped
 
