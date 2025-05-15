@@ -37,7 +37,7 @@ def fetch_batter_data(season=SEASON):
 
 @st.cache_data(show_spinner=False)
 def fetch_pitcher_data(season=SEASON):
-    url = f"https://bdfed.stitch.mlbinfra.com/bdfed/stats/player?&env=prod&season={season}&sportId=1&stats=season&group=pitching&gameType=S&limit=1000000&offset=0"
+    url = f"https://bdfed.stitch.mlbinfra.com/bdfed/stats/player?&env=prod&season={season}&sportId=1&stats=season&group=pitching&gameType=R&limit=1000000&offset=0"
     data = requests.get(url).json()["stats"]
     df = pl.DataFrame({
         "player_id": [x["playerId"] for x in data],
