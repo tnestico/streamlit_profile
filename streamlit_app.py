@@ -152,6 +152,10 @@ def take_mobile_screenshot(mlb_player_id):
 
 st.title("MLB Player Screenshot")
 
+markdown_text = """
+##### By: Thomas Nestico ([@TJStats](https://x.com/TJStats))
+##### Data: [MLB](https://www.mlb.com/)
+"""
 tabs = st.tabs(["Batters", "Pitchers"])
 
 with tabs[0]:
