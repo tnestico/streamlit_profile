@@ -89,8 +89,6 @@ def get_driver(proxy: str = None, socksStr: str = None) -> webdriver.Chrome:
     driver = webdriver.Chrome(service=service, options=options)
     return driver
 
-from PIL import Image, ImageDraw, ImageFont
-import io, os
 
 def take_mobile_screenshot(mlb_player_id):
     print('DRIVER')
@@ -153,27 +151,7 @@ def take_mobile_screenshot(mlb_player_id):
     
     image = Image.open(io.BytesIO(png))
     cropped = image.crop((0, 300, image.width, 1430))
-    
-    # Convert to RGB directly (no transparency)
-    base = cropped.convert("RGB")
-    
-    draw = ImageDraw.Draw(base)
-    watermark_text = "@TJStats"
-    font_size = 200
-    
-    try:
-        font = ImageFont.truetype("arial.ttf", font_size)
-    except:
-        font = ImageFont.load_default()
-    
-    text_width, text_height = draw.textsize(watermark_text, font)
-    padding = 10
-    position = (360,480)
-    
-    # Draw opaque white text directly on the image
-    draw.text(position, watermark_text, font=font, fill=(245, 245, 245))
-    
-    return base  # Already in RGB
+    return cropped
     
 st.title("MLB Player Screenshot")
 
