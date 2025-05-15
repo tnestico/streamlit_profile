@@ -154,7 +154,7 @@ def take_mobile_screenshot(mlb_player_id):
     txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
     draw = ImageDraw.Draw(txt)
     watermark_text = "TJStats"
-    font_size = 28
+    font_size = 100
     try:
         font = ImageFont.truetype("arial.ttf", font_size)
     except:
