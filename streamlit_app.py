@@ -161,7 +161,7 @@ def take_mobile_screenshot(mlb_player_id):
     
     text_width, text_height = draw.textsize(watermark_text, font)
     padding = 10
-    position = (360,600)
+    position = (720,900)
     
     # Draw opaque white text directly on the image
     draw.text(position, watermark_text, font=font, fill=(0, 0, 0))
