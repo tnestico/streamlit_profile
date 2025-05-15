@@ -31,7 +31,8 @@ def fetch_batter_data(season=SEASON):
     data = requests.get(url).json()["stats"]
     df = pl.DataFrame({
         "player_id": [x["playerId"] for x in data],
-        "name": [x["playerFullName"] for x in data]
+        "name": [x["playerFullName"] for x in data],
+        "team": [x["teamAbbrev"] for x in data]
     }).unique().drop_nulls(subset=["player_id"]).sort("name")
     return df
 
@@ -41,7 +42,8 @@ def fetch_pitcher_data(season=SEASON):
     data = requests.get(url).json()["stats"]
     df = pl.DataFrame({
         "player_id": [x["playerId"] for x in data],
-        "name": [x["playerFullName"] for x in data]
+        "name": [x["playerFullName"] for x in data],
+        "team": [x["teamAbbrev"] for x in data]
     }).unique().drop_nulls(subset=["player_id"]).sort("name")
     return df
 
@@ -154,7 +156,7 @@ tabs = st.tabs(["Batters", "Pitchers"])
 
 with tabs[0]:
     batter_df = fetch_batter_data()
-    batter_name_to_id = dict(zip(batter_df["name"], batter_df["player_id"]))
+    batter_name_to_id = dict(zip(batter_df["name"] + ' - ' + batter_df["team"], batter_df["player_id"]))
     selected_batter = st.selectbox("Select a Batter:", list(batter_name_to_id.keys()))
     if st.button("Generate Batter Screenshot"):
         with st.spinner("Taking screenshot..."):
@@ -164,7 +166,7 @@ with tabs[0]:
 
 with tabs[1]:
     pitcher_df = fetch_pitcher_data()
-    pitcher_name_to_id = dict(zip(pitcher_df["name"], pitcher_df["player_id"]))
+    pitcher_name_to_id = dict(zip(pitcher_df["name"] + ' - ' + pitcher_df["team"], pitcher_df["player_id"]))
     selected_pitcher = st.selectbox("Select a Pitcher:", list(pitcher_name_to_id.keys()))
     if st.button("Generate Pitcher Screenshot"):
         with st.spinner("Taking screenshot..."):
