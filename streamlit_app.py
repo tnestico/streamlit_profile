@@ -32,8 +32,9 @@ def fetch_batter_data(season=SEASON):
     df = pl.DataFrame({
         "player_id": [x["playerId"] for x in data],
         "name": [x["playerFullName"] for x in data],
-        "team": [x["teamAbbrev"] for x in data]
-    }).unique().drop_nulls(subset=["player_id"]).sort("name")
+        "team": [x["teamAbbrev"] for x in data],
+        "position": [x["positionAbbrev"] for x in data]
+    }).filter(pl.col('position')!='P').unique().drop_nulls(subset=["player_id"]).sort("name")
     return df
 
 @st.cache_data(show_spinner=False)
@@ -43,8 +44,9 @@ def fetch_pitcher_data(season=SEASON):
     df = pl.DataFrame({
         "player_id": [x["playerId"] for x in data],
         "name": [x["playerFullName"] for x in data],
-        "team": [x["teamAbbrev"] for x in data]
-    }).unique().drop_nulls(subset=["player_id"]).sort("name")
+        "team": [x["teamAbbrev"] for x in data],
+        "position": [x["positionAbbrev"] for x in data]
+    }).filter(pl.col('position')=='P').unique().drop_nulls(subset=["player_id"]).sort("name")
     return df
 
 from selenium.webdriver.chrome.service import Service
