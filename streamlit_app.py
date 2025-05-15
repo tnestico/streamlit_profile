@@ -18,6 +18,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
+from PIL import Image, ImageDraw, ImageFont
 
 
 SEASON = 2025
@@ -89,11 +90,14 @@ def get_driver(proxy: str = None, socksStr: str = None) -> webdriver.Chrome:
     return driver
 
 
+from PIL import Image, ImageDraw, ImageFont
+import io
+import os
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 def take_mobile_screenshot(mlb_player_id):
-
-    
-    # driver = get_driver()
     print('DRIVER')
     driver = get_driver(proxy=None, socksStr="socks5")  # or proxy=None
     
@@ -109,7 +113,6 @@ def take_mobile_screenshot(mlb_player_id):
         st.warning(f"Timeout or error loading page: {e}")
 
     driver.execute_script("""
-        // Remove typical cookie banners
         const selectors = [
             '[class*="cookie"]',
             '[id*="cookie"]',
@@ -122,13 +125,11 @@ def take_mobile_screenshot(mlb_player_id):
             if (el) el.remove();
         }
 
-        // Remove specific buttons by class
         const btns = document.querySelectorAll(
             '.p-button__button.p-button__button--regular.p-button__button--secondary'
         );
         btns.forEach(btn => btn.remove());
 
-        // Also try hiding any fixed footers
         const all = document.querySelectorAll('*');
         all.forEach(el => {
             const style = getComputedStyle(el);
@@ -149,8 +150,25 @@ def take_mobile_screenshot(mlb_player_id):
 
     image = Image.open(io.BytesIO(png))
     cropped = image.crop((0, 300, image.width, 1430))
-    driver.quit()
+
+    # Add watermark
+    draw = ImageDraw.Draw(cropped)
+    watermark_text = "TJStats"  # Replace with your watermark
+    font_size = 14
+    try:
+        font = ImageFont.truetype("arial.ttf", font_size)
+    except:
+        font = ImageFont.load_default()
+
+    text_width, text_height = draw.textsize(watermark_text, font)
+    padding = 10
+    position = (cropped.width - text_width - padding, cropped.height - text_height - padding)
+    
+    draw.text(position, watermark_text, font=font, fill=(255, 255, 255, 180))  # White with light transparency
+
     return cropped
+
+
 
 st.title("MLB Player Screenshot")
 
