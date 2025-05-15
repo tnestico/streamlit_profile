@@ -150,7 +150,7 @@ def take_mobile_screenshot(mlb_player_id):
     driver.quit()
     return cropped
 
-st.title("MLB Player Mobile Screenshot")
+st.title("MLB Player Screenshot")
 
 tabs = st.tabs(["Batters", "Pitchers"])
 
