@@ -154,7 +154,7 @@ def take_mobile_screenshot(mlb_player_id):
     # Add watermark
     draw = ImageDraw.Draw(cropped)
     watermark_text = "TJStats"  # Replace with your watermark
-    font_size = 14
+    font_size = 28
     try:
         font = ImageFont.truetype("arial.ttf", font_size)
     except:
