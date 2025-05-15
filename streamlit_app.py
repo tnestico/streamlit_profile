@@ -156,6 +156,8 @@ markdown_text = """
 ##### By: Thomas Nestico ([@TJStats](https://x.com/TJStats))
 ##### Data: [MLB](https://www.mlb.com/)
 """
+st.markdown(markdown_text)
+
 tabs = st.tabs(["Batters", "Pitchers"])
 
 with tabs[0]:
