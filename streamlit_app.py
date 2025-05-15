@@ -143,35 +143,31 @@ def take_mobile_screenshot(mlb_player_id):
         os.rmdir(user_data_dir)
     except:
         pass
-
+    
     image = Image.open(io.BytesIO(png))
     cropped = image.crop((0, 300, image.width, 1430))
-
-    # Convert to RGBA
-    base = cropped.convert("RGBA")
-
-    # Make a transparent overlay
-    txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
-    draw = ImageDraw.Draw(txt)
+    
+    # Convert to RGB directly (no transparency)
+    base = cropped.convert("RGB")
+    
+    draw = ImageDraw.Draw(base)
     watermark_text = "TJStats"
     font_size = 100
+    
     try:
         font = ImageFont.truetype("arial.ttf", font_size)
     except:
         font = ImageFont.load_default()
-
+    
     text_width, text_height = draw.textsize(watermark_text, font)
     padding = 10
     position = (base.width - text_width - padding, base.height - text_height - padding)
-
-    # Draw semi-transparent white text
-    draw.text(position, watermark_text, font=font, fill=(255, 255, 255))  # 128 = 50% opacity
-
-    # Merge watermark with image
-    watermarked = Image.alpha_composite(base, txt)
-
-    return watermarked.convert("RGB")  # Return to RGB if saving as JPEG or displaying without alpha
-
+    
+    # Draw opaque white text directly on the image
+    draw.text(position, watermark_text, font=font, fill=(255, 255, 255))
+    
+    return base  # Already in RGB
+    
 st.title("MLB Player Screenshot")
 
 markdown_text = """
