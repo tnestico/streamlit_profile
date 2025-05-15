@@ -119,12 +119,12 @@ def take_mobile_screenshot(mlb_player_id):
             const el = document.querySelector(sel);
             if (el) el.remove();
         }
-
+    
         const btns = document.querySelectorAll(
             '.p-button__button.p-button__button--regular.p-button__button--secondary'
         );
         btns.forEach(btn => btn.remove());
-
+    
         const all = document.querySelectorAll('*');
         all.forEach(el => {
             const style = getComputedStyle(el);
@@ -132,7 +132,14 @@ def take_mobile_screenshot(mlb_player_id):
                 el.style.display = 'none';
             }
         });
+    
+        // Change Stats tab text to "TJStats"
+        const statsTab = document.querySelector('#stats-nav-item');
+        if (statsTab) {
+            statsTab.textContent = 'TJStats';
+        }
     """)
+
     WebDriverWait(driver, 2).until(lambda d: True)
 
     png = driver.get_screenshot_as_png()
