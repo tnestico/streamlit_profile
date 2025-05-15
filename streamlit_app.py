@@ -152,7 +152,7 @@ def take_mobile_screenshot(mlb_player_id):
     
     draw = ImageDraw.Draw(base)
     watermark_text = "TJStats"
-    font_size = 100
+    font_size = 200
     
     try:
         font = ImageFont.truetype("arial.ttf", font_size)
@@ -161,10 +161,10 @@ def take_mobile_screenshot(mlb_player_id):
     
     text_width, text_height = draw.textsize(watermark_text, font)
     padding = 10
-    position = (720,900)
+    position = (720,850)
     
     # Draw opaque white text directly on the image
-    draw.text(position, watermark_text, font=font, fill=(0, 0, 0))
+    draw.text(position, watermark_text, font=font, fill=(240, 240, 240))
     
     return base  # Already in RGB
     
