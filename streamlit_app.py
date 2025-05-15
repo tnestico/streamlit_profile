@@ -105,14 +105,30 @@ def take_mobile_screenshot(mlb_player_id):
         st.warning(f"Timeout or error loading page: {e}")
 
     driver.execute_script("""
-        const selectors = ['[class*="cookie"]', '[id*="cookie"]', 'iframe[src*="consent"]', '[role="dialog"]', 'div[class*="banner"]'];
-        selectors.forEach(sel => {
+        // Remove typical cookie banners
+        const selectors = [
+            '[class*="cookie"]',
+            '[id*="cookie"]',
+            'iframe[src*="consent"]',
+            '[role="dialog"]',
+            'div[class*="banner"]'
+        ];
+        for (let sel of selectors) {
             const el = document.querySelector(sel);
-            if(el) el.remove();
-        });
-        document.querySelectorAll('*').forEach(el => {
+            if (el) el.remove();
+        }
+
+        // Remove specific buttons by class
+        const btns = document.querySelectorAll(
+            '.p-button__button.p-button__button--regular.p-button__button--secondary'
+        );
+        btns.forEach(btn => btn.remove());
+
+        // Also try hiding any fixed footers
+        const all = document.querySelectorAll('*');
+        all.forEach(el => {
             const style = getComputedStyle(el);
-            if(style.position === 'fixed' && style.bottom === '0px') {
+            if (style.position === 'fixed' && style.bottom === '0px') {
                 el.style.display = 'none';
             }
         });
