@@ -151,7 +151,7 @@ def take_mobile_screenshot(mlb_player_id):
     base = cropped.convert("RGB")
     
     draw = ImageDraw.Draw(base)
-    watermark_text = "TJStats"
+    watermark_text = "@TJStats"
     font_size = 200
     
     try:
@@ -161,10 +161,10 @@ def take_mobile_screenshot(mlb_player_id):
     
     text_width, text_height = draw.textsize(watermark_text, font)
     padding = 10
-    position = (360,400)
+    position = (360,460)
     
     # Draw opaque white text directly on the image
-    draw.text(position, watermark_text, font=font, fill=(240, 240, 240))
+    draw.text(position, watermark_text, font=font, fill=(245, 245, 245))
     
     return base  # Already in RGB
     
